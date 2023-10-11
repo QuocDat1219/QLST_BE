@@ -6,6 +6,7 @@ const chiNhanhRoutes = require("../routes/chinhanhRoutes");
 const nhanVienRoutes = require("../routes/nhanVienRoutes");
 const khachHangRoutes = require("../routes/khachHangRoutes");
 const phanTanNgangHangRoutes = require("../routes/phanTanNgangRoutes");
+const loginMysqlRoutes = require("../routes/loginMysqlRoutes");
 connectSQL();
 connectMysql();
 const app = express();
@@ -19,6 +20,7 @@ app.use("/api/chinhanh", chiNhanhRoutes);
 app.use("/api/nhanvien", nhanVienRoutes);
 app.use("/api/khachhang", khachHangRoutes);
 app.use("/api/phantan", phanTanNgangHangRoutes);
+app.use("/api/mysql", loginMysqlRoutes);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
