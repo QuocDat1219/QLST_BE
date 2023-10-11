@@ -37,6 +37,38 @@ const loginMysql = async (req, res) => {
   });
 };
 
+const getTable = async (req, res) => {
+  mysqlConnection.query("SHOW FULL TABLES", (queryError, results) => {
+    if (queryError) {
+      console.error("Lỗi truy vấn MySQL:", queryError);
+      res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+      return;
+    }
+    const table = results.map((row) => Object.values(row)[0]);
+
+    res.status(200).json({ table });
+  });
+};
+
+const getColumnOfTable = async (req, res) => {
+  const { tableName } = req.body;
+  try {
+    mysqlConnection.query(
+      `SHOW COLUMNS FROM ${tableName}`,
+      (queryError, results) => {
+        if (queryError) {
+          console.error("Lỗi truy vấn MySQL:", queryError);
+          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          return;
+        }
+        const columns = results.map((row) => Object.values(row)[0]);
+        res.status(200).json({ columns });
+      }
+    );
+  } catch (error) {}
+};
 module.exports = {
   loginMysql,
+  getTable,
+  getColumnOfTable,
 };
