@@ -128,7 +128,6 @@ const phanTanNgang = async (req, res) => {
 
         "alter table chitietphieunhap add constraint fk_ctpn_pn foreign key (MaPhieuNhap) references phieunhap(MaPhieuNhap)",
       ];
-
       for (const sqlQuery of phanTanQueries) {
         await sqlPool.query(sqlQuery);
       }

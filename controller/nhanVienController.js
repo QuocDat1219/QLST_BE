@@ -1,5 +1,6 @@
 const { sqlPool } = require("../model/connect_sqlserver");
 const { mysqlConnection } = require("../model/connect_mysql");
+const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllNhanVien = async (req, res) => {
   try {
@@ -31,36 +32,6 @@ const getNhanVienById = async (req, res) => {
   }
 };
 
-// Hàm kiểm tra mã nhân viên trên cả MySQL và SQL Server
-const checkMaNV = async (maNV) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Kiểm tra trên SQL Server
-      const checkQuery = `SELECT COUNT(*) AS count FROM NHANVIEN WHERE MaNV = '${maNV}'`;
-      const sqlCheckResult = await sqlPool.request().query(checkQuery);
-
-      // Kiểm tra trên MySQL
-      mysqlConnection.query(checkQuery, (mysqlError, mysqlResults) => {
-        if (mysqlError) {
-          reject(mysqlError);
-          return;
-        }
-
-        const mysqlCount = mysqlResults[0].count;
-
-        // Kiểm tra kết quả trên cả hai cơ sở dữ liệu
-        if (sqlCheckResult.recordset[0].count > 0 || mysqlCount > 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const createNhanVien = async (req, res) => {
   const {
     reqMaNV,
@@ -73,10 +44,9 @@ const createNhanVien = async (req, res) => {
     reqSdt,
   } = req.body;
   const insertQuery = `INSERT INTO nhanvien VALUES ('${reqMaNV}','${reqMaCN}','${reqMaCV}',N'${reqTenNV}', '${reqNgaySinh}','${reqGioiTinh}',N'${reqDiachi}','${reqSdt}')`;
-
+  const checkNhanVien = `SELECT COUNT(*) AS COUNT FROM NHANVIEN WHERE MaNV = '${reqMaNV}'`;
   try {
-    const maNVExists = await checkMaNV(reqMaNV);
-
+    const maNVExists = await checkInsert(checkNhanVien);
     if (maNVExists) {
       res.status(400).json({ message: "Nhân viên đã tồn tại" });
       return;
@@ -114,38 +84,6 @@ const createNhanVien = async (req, res) => {
   }
 };
 
-// Hàm kiểm tra nhân viên
-const checkNhanVien = async (id) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const checkQuery = `SELECT COUNT(*) AS count FROM NHANVIEN WHERE MaNV = '${id}'`;
-      // Kiểm tra trên SQL Server
-      const sqlCheckResult = await sqlPool.request().query(checkQuery);
-
-      // Kiểm tra trên MySQL
-      mysqlConnection.query(checkQuery, (mysqlError, mysqlResults) => {
-        if (mysqlError) {
-          reject(mysqlError);
-          return;
-        }
-
-        const mysqlCount = mysqlResults[0].count;
-
-        // Kiểm tra kết quả trên cả hai cơ sở dữ liệu
-        if (sqlCheckResult.recordset[0].count > 0 && mysqlCount > 0) {
-          resolve(true);
-        } else if (sqlCheckResult.recordset[0].count == 0 && mysqlCount > 0) {
-          resolve(false);
-        } else {
-          resolve(false);
-        }
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const updateNhanVien = async (req, res) => {
   const id = req.params.id;
   const {
@@ -158,9 +96,10 @@ const updateNhanVien = async (req, res) => {
     reqSdt,
   } = req.body;
   const updateQuery = `UPDATE nhanvien set MACN='${reqMaCN}', MACV='${reqMaCV}', TENNV=N'${reqTenNV}', NGAYSINH = '${reqNgaySinh}', GIOITINH = '${reqGioiTinh}', DIACHI = N'${reqDiachi}', SDT = '${reqSdt}' where MANV = '${id}'`;
+  const checkNhanVien = `SELECT cOUNT(*) as count FROM NHANVIEN WHERE MaNV = '${id}'`;
 
   try {
-    const nvExists = await checkNhanVien(id);
+    const nvExists = await checkUpdate(checkNhanVien);
     if (!nvExists) {
       res.status(400).send({ message: "Không tìm thấy nhân viên" });
       return;
@@ -182,15 +121,17 @@ const updateNhanVien = async (req, res) => {
       }
     });
   } catch (error) {
-    res.staus(500).send({ message: "Cập nhật nhân viên không thành công!" });
+    console.error(error);
+    res.status(500).send({ message: "Cập nhật nhân viên không thành công!" });
   }
 };
 
 const deleteNhanVien = async (req, res) => {
   const id = req.params.id;
   const deleteQuery = `DELETE FROM NHANVIEN WHERE MaNV = '${id}'`;
+  const checkNhanVien = `SELECT cOUNT(*) as count FROM NHANVIEN WHERE MaNV = '${id}'`;
   try {
-    const nvExists = await checkNhanVien(id);
+    const nvExists = await checkUpdate(checkNhanVien);
     if (!nvExists) {
       res.status(400).send({ message: "Không tìm thấy nhân viên" });
       return;

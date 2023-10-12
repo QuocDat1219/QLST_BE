@@ -1,6 +1,6 @@
 const { sqlPool } = require("../model/connect_sqlserver");
 const { mysqlConnection } = require("../model/connect_mysql");
-const { request } = require("express");
+const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 const getAllKhachHang = async (req, res) => {
   try {
     const selectQuery = "SELECT * FROM KHACHHANG";
@@ -30,31 +30,6 @@ const getKhachHangById = async (req, res) => {
   }
 };
 
-const checkInsert = async (MaKH) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const checkQuery = `SELECT COUNT(*) AS count FROM KHACHHANG WHERE MaKH = '${MaKH}'`;
-      const sqlCheckResult = await sqlPool.request().query(checkQuery);
-
-      mysqlConnection.query(checkQuery, (mysqlError, mysqlResults) => {
-        if (mysqlError) {
-          reject(mysqlError);
-          return;
-        }
-
-        const mysqlCount = mysqlResults[0].count;
-        if (sqlCheckResult.recordset[0].count > 0 || mysqlCount > 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const createKhachHang = async (req, res) => {
   const {
     reqMaKH,
@@ -66,9 +41,9 @@ const createKhachHang = async (req, res) => {
     reqSdt,
   } = req.body;
   const insertQuery = `INSERT INTO KHACHHANG VALUES('${reqMaKH}', '${reqMaCN}', N'${reqTenKH}', '${reqNgaySinh}', '${reqGioiTinh}', N'${reqDiaChi}', '${reqSdt}')`;
-
+  const checkKhachHang = `SELECT cOUNT(*) as count FROM KHACHHANG WHERE MaKH = '${reqMaKH}'`;
   try {
-    const khExists = await checkInsert(reqMaKH);
+    const khExists = await checkInsert(checkKhachHang);
     if (khExists) {
       res.status(500).send({ message: "Khách hàng đã tồn tại!" });
       return;
@@ -100,41 +75,14 @@ const createKhachHang = async (req, res) => {
   }
 };
 
-const checkUpdate = async (id) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const checkQuery = `SELECT COUNT(*) AS count FROM KHACHHANG WHERE MaKH = '${id}'`;
-      const sqlCheckResult = await sqlPool.request().query(checkQuery);
-
-      mysqlConnection.query(checkQuery, (mysqlError, mysqlResults) => {
-        if (mysqlError) {
-          reject(mysqlError);
-          return;
-        }
-
-        const mysqlCount = mysqlResults[0].count;
-        // Kiểm tra kết quả trên cả hai cơ sở dữ liệu
-        if (sqlCheckResult.recordset[0].count > 0 && mysqlCount > 0) {
-          resolve(true);
-        } else if (sqlCheckResult.recordset[0].count == 0 && mysqlCount > 0) {
-          resolve(false);
-        } else {
-          resolve(false);
-        }
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const updateKhachHang = async (req, res) => {
   const id = req.params.id;
   const { reqMaCN, reqTenKH, reqNgaySinh, reqGioiTinh, reqDiaChi, reqSdt } =
     req.body;
   const updateQuery = `UPDATE KHACHHANG SET MACN = '${reqMaCN}', TENKH = N'${reqTenKH}', NGAYSINH = '${reqNgaySinh}', GIOITINH = '${reqGioiTinh}', DIACHI = N'${reqDiaChi}', SDT = '${reqSdt}' WHERE MAKH = '${id}'`;
+  const checkKhachHang = `SELECT cOUNT(*) as count FROM KHACHHANG WHERE MaKH = '${id}'`;
   try {
-    const khExists = await checkUpdate(id);
+    const khExists = await checkUpdate(checkKhachHang);
     if (!khExists) {
       res.status(400).send({ message: "Không tìm thấy khách hàng" });
       return;
@@ -158,6 +106,7 @@ const updateKhachHang = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error(error);
     res.status(500).send({ message: "Cập nhật không thành công" });
   }
 };
@@ -165,8 +114,9 @@ const updateKhachHang = async (req, res) => {
 const deleteKhachHang = async (req, res) => {
   const id = req.params.id;
   const deleteQuery = `DELETE FROM KHACHHANG WHERE MAKH = '${id}'`;
+  const checkKhachHang = `SELECT cOUNT(*) as count FROM KHACHHANG WHERE MaKH = '${id}'`;
   try {
-    const khExists = await checkUpdate(id);
+    const khExists = await checkUpdate(checkKhachHang);
     if (!khExists) {
       res.status(400).send({ message: "Không tìm thấy khách hàng" });
       return;
