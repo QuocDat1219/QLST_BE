@@ -8,6 +8,10 @@ const khachHangRoutes = require("../routes/khachHangRoutes");
 const phanTanNgangHangRoutes = require("../routes/phanTanNgangRoutes");
 const loginMysqlRoutes = require("../routes/loginMysqlRoutes");
 const khoRoutes = require("../routes/khoRoutes");
+const taiKhoanRoutes = require("../routes/taiKhoanRouters");
+const chucVuRoutes = require("../routes/chucVuRoutes");
+const bophanRoutes = require("../routes/boPhanRoutes");
+const phieuNhapRoutes = require("../routes/phieuNhapRoutes");
 connectSQL();
 connectMysql();
 const app = express();
@@ -23,6 +27,10 @@ app.use("/api/khachhang", khachHangRoutes);
 app.use("/api/phantan", phanTanNgangHangRoutes);
 app.use("/api/mysql", loginMysqlRoutes);
 app.use("/api/kho", khoRoutes);
+app.use("/api/taikhoan", taiKhoanRoutes);
+app.use("/api/chucvu", chucVuRoutes);
+app.use("/api/bophan", bophanRoutes);
+app.use("/api/phieunhap", phieuNhapRoutes);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
