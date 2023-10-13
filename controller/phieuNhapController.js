@@ -37,11 +37,11 @@ const getPhieuNhapById = async (req, res) => {
 };
 
 const createPhieuNhap = async (req, res) => {
-  const { reqMaPhieuNhap, reMaNV, reqMaKho, reqDVT, reqNgayLapPhieu } =
+  const { reqMaPhieuNhap, reqMaNV, reqMaKho, reqDVT, reqNgayLapPhieu } =
     req.body;
-  const insertQuery = `INSERT INTO PHIEUNHAP VALUES ('${reqMaPhieuNhap}','${reMaNV}','${reqMaKho}','${reqDVT}','${reqNgayLapPhieu}')`;
+  const insertQuery = `INSERT INTO PHIEUNHAP VALUES ('${reqMaPhieuNhap}','${reqMaNV}','${reqMaKho}',N'${reqDVT}','${reqNgayLapPhieu}')`;
   const checkPHIEUNHAP = `SELECT cOUNT(*) as count FROM PHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}'`;
-  console.log(insertQuery);
+
   try {
     const TKExists = await checkInsert(checkPHIEUNHAP);
     if (TKExists) {
@@ -76,11 +76,11 @@ const createPhieuNhap = async (req, res) => {
 };
 
 const updatePhieuNhap = async (req, res) => {
-  const userName = req.params.userName;
-  const { reqMaNV, reqMatKhau, reqQuyen } = req.body;
-  const updateQuery = `UPDATE PHIEUNHAP SET Matkhau = '${reqMatKhau}',Quyen = '${reqQuyen}' WHERE TenTK = '${userName}'`;
-  const checkPHIEUNHAP = `SELECT cOUNT(*) as count FROM PHIEUNHAP WHERE TenTK = '${userName}'`;
-  console.log(updateQuery);
+  const id = req.params.id;
+  const { reqMaNV, reqMaKho, reqDVT, reqNgayLapPhieu } = req.body;
+  const updateQuery = `UPDATE PHIEUNHAP SET MaNV = '${reqMaNV}', MaKho = '${reqMaKho}',DVT = N'${reqDVT}', NgayLapPhieu= '${reqNgayLapPhieu}'WHERE MaPhieuNhap = '${id}'`;
+  const checkPHIEUNHAP = `SELECT cOUNT(*) as count FROM PHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+
   try {
     const TKExists = await checkInsert(checkPHIEUNHAP);
     if (!TKExists) {
@@ -115,9 +115,9 @@ const updatePhieuNhap = async (req, res) => {
 };
 
 const deletePhieuNhap = async (req, res) => {
-  const userName = req.params.userName;
-  const deleteteTK = `DELETE FROM PHIEUNHAP WHERE TenTK = '${userName}'`;
-  const checkTK = `SELECT cOUNT(*) as count FROM PHIEUNHAP WHERE TenTK = '${userName}'`;
+  const id = req.params.id;
+  const deleteteTK = `DELETE FROM PHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+  const checkTK = `SELECT cOUNT(*) as count FROM PHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
 
   try {
     const khoExists = await checkUpdate(checkTK);

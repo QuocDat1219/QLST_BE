@@ -12,6 +12,15 @@ const taiKhoanRoutes = require("../routes/taiKhoanRouters");
 const chucVuRoutes = require("../routes/chucVuRoutes");
 const bophanRoutes = require("../routes/boPhanRoutes");
 const phieuNhapRoutes = require("../routes/phieuNhapRoutes");
+const chiTietPhieuNhapRoutes = require("../routes/chiTietPhieuNhapRoutes");
+const phieuGiamGiaRoutes = require("../routes/phieuGiamGiaRoutes");
+const nhaSanXuatRoutes = require("../routes/nhaSanXuatRoutes");
+const loaiHangRoutes = require("../routes/loaiHangRoutes");
+const keHangRoutes = require("../routes/keHangRoutes");
+const hoaDonRoutes = require("../routes/hoaDonRoutes");
+const chiTietHoaDonRoutes = require("../routes/chiTietHoaDonRoutes");
+const matHangRoutes = require("../routes/matHangRoutes");
+
 connectSQL();
 connectMysql();
 const app = express();
@@ -31,6 +40,14 @@ app.use("/api/taikhoan", taiKhoanRoutes);
 app.use("/api/chucvu", chucVuRoutes);
 app.use("/api/bophan", bophanRoutes);
 app.use("/api/phieunhap", phieuNhapRoutes);
+app.use("/api/chitietphieunhap", chiTietPhieuNhapRoutes);
+app.use("/api/giamgia", phieuGiamGiaRoutes);
+app.use("/api/nhasanxuat", nhaSanXuatRoutes);
+app.use("/api/loaihang", loaiHangRoutes);
+app.use("/api/kehang", keHangRoutes);
+app.use("/api/hoadon", hoaDonRoutes);
+app.use("/api/chitiethoadon", chiTietHoaDonRoutes);
+app.use("/api/mathang", matHangRoutes);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
