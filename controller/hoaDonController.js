@@ -4,7 +4,8 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllHOADON = async (req, res) => {
   try {
-    const sqlQuery = "SELECT * FROM HOADON";
+    const sqlQuery =
+      "select hd.MaHD as MaHD, nv.TenNV as TenNV, kh.TenKH as TenKH, hd.HinhThucTT as HinhThucTT, hd.NgayLap as NgayLap from hoadon hd inner join nhanvien nv on hd.MaNV = nv.MaNV inner join khachhang kh on hd.MaKH = kh.MaKH";
     const allHOADON = await sqlPool.request().query(sqlQuery);
     const isHOADON = allHOADON.recordset.length;
     if (isHOADON > 0) {

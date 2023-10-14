@@ -3,7 +3,8 @@ const { mysqlConnection } = require("../model/connect_mysql");
 const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 const getAllKhachHang = async (req, res) => {
   try {
-    const selectQuery = "SELECT * FROM KHACHHANG";
+    const selectQuery =
+      "select kh.MaKH as MaKH, cn.TenCN as TenCN, kh.TenKH as TenKH, kh.NgaySinh as NgaySinh,kh.GioiTinh as GioiTinh, kh.Diachi as Diachi,kh.Sdt as Sdt from khachhang kh inner join chinhanh cn on kh.MaCN = cn.MaCN";
     const allKhachHang = await sqlPool.request().query(selectQuery);
     if (allKhachHang.recordset.length > 0) {
       res.status(200).json(allKhachHang.recordset);

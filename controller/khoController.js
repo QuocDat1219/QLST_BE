@@ -4,7 +4,11 @@ const { mysqlConnection } = require("../model/connect_mysql");
 const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 const getAllKho = async (req, res) => {
   try {
-    const allKho = await sqlPool.request().query("SELECT * FROM KHO");
+    const allKho = await sqlPool
+      .request()
+      .query(
+        "select kho.MaKho as MaKho, chinhanh.TenCN as TenCN, kho.TenKho as TenKho, kho.DiaChi as DiaChi from kho inner join chinhanh on kho.MaCN = chinhanh.MaCN"
+      );
     const count = allKho.recordset.length;
     if (count > 0) {
       res.status(200).json(allKho.recordset);
