@@ -132,13 +132,13 @@ const phanTanNgang = async (req, res) => {
         await sqlPool.query(sqlQuery);
       }
 
-      res.status(200).send({ message: "Phân tán dữ liệu thành công!" });
+      res.status(200).json({ message: "success" });
     } catch (error) {
       console.error("Lỗi khi thực hiện các lệnh SQL:", error);
-      res.status(500).send({ message: "Có lỗi xảy ra khi phân tán dữ liệu" });
+      res.status(500).send({ message: "error" });
     }
   } else {
-    res.status(500).send({ message: "Hãy chọn điều kiện phân tán" });
+    res.status(500).send({ message: "error" });
   }
 };
 

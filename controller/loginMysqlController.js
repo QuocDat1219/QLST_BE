@@ -78,9 +78,7 @@ const getDieuKienViTu = async (req, res) => {
           res.status(500).json({ error: "Lỗi truy vấn MySQL" });
           return;
         }
-        const columns = results.map((row) => Object.values(row)[0]);
-        console.log(columns);
-        res.status(200).json({ columns });
+        res.status(200).json({ results });
       }
     );
   } catch (error) {}
