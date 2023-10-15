@@ -4,7 +4,8 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllTaiKhoan = async (req, res) => {
   try {
-    const sqlQuery = "SELECT * FROM TAIKHOAN";
+    const sqlQuery =
+      "SELECT NHANVIEN.TENNV as TenNV, TAIKHOAN.TENTK AS TenTK, TAIKHOAN.QUYEN AS Quyen FROM TAIKHOAN INNER JOIN NHANVIEN ON TAIKHOAN.MANV = NHANVIEN.MANV";
     const allTaiKhoan = await sqlPool.request().query(sqlQuery);
     const isTaiKhoan = allTaiKhoan.recordset.length;
     if (isTaiKhoan > 0) {

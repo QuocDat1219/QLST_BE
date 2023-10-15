@@ -4,7 +4,8 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllKE = async (req, res) => {
   try {
-    const sqlQuery = "SELECT * FROM KE";
+    const sqlQuery =
+      "select ke.MaKe as MaKe, mathang.TenMH as TenMH, ke.TenKe as TenKe, ke.Vitri as Vitri from ke inner join mathang on ke.MaMH = mathang.MaMH";
     const allKE = await sqlPool.request().query(sqlQuery);
     const isKE = allKE.recordset.length;
     if (isKE > 0) {

@@ -4,7 +4,8 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllChucVu = async (req, res) => {
   try {
-    const sqlQuery = "SELECT * FROM CHUCVU";
+    const sqlQuery =
+      "select chucvu.MaCV as MaCV, bophan.TenBP as TenBP, chucvu.TenCV as TenCV from chucvu inner join bophan on chucvu.MaBP = bophan.MaBP";
     const allCV = await sqlPool.request().query(sqlQuery);
     const isCV = allCV.recordset.length;
     if (isCV > 0) {

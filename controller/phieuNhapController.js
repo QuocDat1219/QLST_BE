@@ -4,7 +4,8 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 
 const getAllPhieuNhap = async (req, res) => {
   try {
-    const sqlQuery = "SELECT * FROM PHIEUNHAP";
+    const sqlQuery =
+      "select pn.MaPhieuNhap as MaPhieuNhap, nv.TenNV as TenNV, kho.TenKho as TenKho, pn.DVT as DVT,pn.NgayLapPhieu as NgayLapPhieu from phieunhap pn inner join nhanvien nv on pn.MaNV = nv.MaNV inner join kho on pn.MaKho = kho.MaKho";
     const allPHIEUNHAP = await sqlPool.request().query(sqlQuery);
     const isPHIEUNHAP = allPHIEUNHAP.recordset.length;
     if (isPHIEUNHAP > 0) {
