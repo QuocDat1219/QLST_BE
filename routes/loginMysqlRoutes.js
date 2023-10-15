@@ -5,8 +5,10 @@ const {
   loginMysql,
   getTable,
   getColumnOfTable,
+  getDieuKienViTu,
 } = require("../controller/loginMysqlController");
 router.post("/login", loginMysql);
 router.get("/showtable", getTable);
-router.get("/showcolumn", getColumnOfTable);
+router.get("/showcolumn/:table", getColumnOfTable);
+router.get("/dieukienvitu", getDieuKienViTu);
 module.exports = router;

@@ -51,7 +51,7 @@ const getTable = async (req, res) => {
 };
 
 const getColumnOfTable = async (req, res) => {
-  const { tableName } = req.body;
+  const tableName = req.params.table;
   try {
     mysqlConnection.query(
       `SHOW COLUMNS FROM ${tableName}`,
@@ -67,8 +67,27 @@ const getColumnOfTable = async (req, res) => {
     );
   } catch (error) {}
 };
+
+const getDieuKienViTu = async (req, res) => {
+  try {
+    mysqlConnection.query(
+      `SELECT MaCV, TenCV FROM chucvu`,
+      (queryError, results) => {
+        if (queryError) {
+          console.error("Lỗi truy vấn MySQL:", queryError);
+          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          return;
+        }
+        const columns = results.map((row) => Object.values(row)[0]);
+        console.log(columns);
+        res.status(200).json({ columns });
+      }
+    );
+  } catch (error) {}
+};
 module.exports = {
   loginMysql,
   getTable,
   getColumnOfTable,
+  getDieuKienViTu,
 };
