@@ -20,7 +20,7 @@ const keHangRoutes = require("../routes/keHangRoutes");
 const hoaDonRoutes = require("../routes/hoaDonRoutes");
 const chiTietHoaDonRoutes = require("../routes/chiTietHoaDonRoutes");
 const matHangRoutes = require("../routes/matHangRoutes");
-
+const cors = require("cors");
 connectSQL();
 connectMysql();
 const app = express();
