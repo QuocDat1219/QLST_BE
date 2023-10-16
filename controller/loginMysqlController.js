@@ -44,7 +44,7 @@ const getTable = async (req, res) => {
       mysqlConnection.query("SHOW FULL TABLES", (queryError, results) => {
         if (queryError) {
           console.error("Lỗi truy vấn MySQL:", queryError);
-          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          res.send({ error: "Lỗi truy vấn MySQL" });
           return;
         }
         const table = results.map((row) => Object.values(row)[0]);
@@ -52,14 +52,10 @@ const getTable = async (req, res) => {
         res.status(200).json({ table });
       });
     } else {
-      res
-        .status(500)
-        .send({ error: "Cở sở dữ liệu này không hỗ trợ phân tán" });
+      res.send({ error: "Cở sở dữ liệu này không hỗ trợ phân tán" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .send({ error: "Lỗi truy vấn cơ sở dữ liệu: " + error.message });
+    res.send({ error: "Lỗi truy vấn cơ sở dữ liệu: " + error.message });
   }
 };
 
@@ -71,7 +67,7 @@ const getColumnOfTable = async (req, res) => {
       (queryError, results) => {
         if (queryError) {
           console.error("Lỗi truy vấn MySQL:", queryError);
-          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          res.send({ error: "Lỗi truy vấn MySQL" });
           return;
         }
         const columns = results.map((row) => Object.values(row)[0]);
@@ -88,7 +84,7 @@ const getDieuKienViTu = async (req, res) => {
       (queryError, results) => {
         if (queryError) {
           console.error("Lỗi truy vấn MySQL:", queryError);
-          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          res.send({ error: "Lỗi truy vấn MySQL" });
           return;
         }
         res.status(200).json({ results });
