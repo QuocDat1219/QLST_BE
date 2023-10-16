@@ -135,10 +135,10 @@ const phanTanNgang = async (req, res) => {
       res.status(200).json({ message: "success" });
     } catch (error) {
       console.error("Lỗi khi thực hiện các lệnh SQL:", error);
-      res.status(500).send({ message: "error" });
+      res.status(300).send({ message: "error" });
     }
   } else {
-    res.status(500).send({ message: "error" });
+    res.status(300).send({ message: "error" });
   }
 };
 

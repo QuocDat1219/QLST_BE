@@ -15,7 +15,7 @@ const loginMysql = async (req, res) => {
   connection.connect((err) => {
     if (err) {
       console.error("Lỗi kết nối Server:", err);
-      res.status(500).json({ error: "Lỗi kết nối Server" });
+      res.status(300).json({ error: "Lỗi kết nối Server" });
       return;
     }
 
@@ -23,7 +23,7 @@ const loginMysql = async (req, res) => {
     connection.query("SHOW DATABASES", (queryError, results) => {
       if (queryError) {
         console.error("Lỗi truy vấn MySQL:", queryError);
-        res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+        res.status(300).json({ error: "Lỗi truy vấn MySQL" });
         return;
       }
 
