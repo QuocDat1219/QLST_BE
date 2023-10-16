@@ -8,7 +8,7 @@ const {
   getDieuKienViTu,
 } = require("../controller/loginMysqlController");
 router.post("/login", loginMysql);
-router.get("/showtable", getTable);
+router.get("/showtable/:databasename", getTable);
 router.get("/showcolumn/:table", getColumnOfTable);
 router.get("/dieukienvitu", getDieuKienViTu);
 module.exports = router;

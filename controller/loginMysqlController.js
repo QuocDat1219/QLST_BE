@@ -38,16 +38,29 @@ const loginMysql = async (req, res) => {
 };
 
 const getTable = async (req, res) => {
-  mysqlConnection.query("SHOW FULL TABLES", (queryError, results) => {
-    if (queryError) {
-      console.error("Lỗi truy vấn MySQL:", queryError);
-      res.status(500).json({ error: "Lỗi truy vấn MySQL" });
-      return;
-    }
-    const table = results.map((row) => Object.values(row)[0]);
+  const databasename = req.params.databasename;
+  try {
+    if (databasename === "qlst") {
+      mysqlConnection.query("SHOW FULL TABLES", (queryError, results) => {
+        if (queryError) {
+          console.error("Lỗi truy vấn MySQL:", queryError);
+          res.status(500).json({ error: "Lỗi truy vấn MySQL" });
+          return;
+        }
+        const table = results.map((row) => Object.values(row)[0]);
 
-    res.status(200).json({ table });
-  });
+        res.status(200).json({ table });
+      });
+    } else {
+      res
+        .status(500)
+        .send({ error: "Cở sở dữ liệu này không hỗ trợ phân tán" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Lỗi truy vấn cơ sở dữ liệu: " + error.message });
+  }
 };
 
 const getColumnOfTable = async (req, res) => {
