@@ -11,11 +11,11 @@ const getAllMATHANG = async (req, res) => {
     if (isMATHANG > 0) {
       res.status(200).json(allMATHANG.recordset);
     } else {
-      res.status(400).json({ message: "Không có mặt hàng" });
+      res.json({ message: "Không có mặt hàng" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getMATHANGById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aMATHANG.recordset);
     } else {
-      res.status(400).send({ message: "mặt hàng không tồn tại" });
+      res.send({ message: "mặt hàng không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -54,7 +54,7 @@ const createMATHANG = async (req, res) => {
   try {
     const TMATHANGxists = await checkInsert(checkMATHANG);
     if (TMATHANGxists) {
-      res.status(500).send({ message: "mặt hàng đã tồn tại" });
+      res.send({ message: "mặt hàng đã tồn tại" });
       return;
     }
 
@@ -62,11 +62,11 @@ const createMATHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({ message: "Lỗi khi thêm mặt hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm mặt hàng ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm mặt hàng ở MySql" });
+            res.send({ message: "Lỗi khi thêm mặt hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -76,7 +76,7 @@ const createMATHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm mặt hàng không thành công" });
+    res.send({ message: "Thêm mặt hàng không thành công" });
   }
 };
 
@@ -97,7 +97,7 @@ const updateMATHANG = async (req, res) => {
   try {
     const TMATHANGxists = await checkInsert(checkMATHANG);
     if (!TMATHANGxists) {
-      res.status(400).send({ message: "Không tìm thấy mặt hàng" });
+      res.send({ message: "Không tìm thấy mặt hàng" });
       return;
     }
 
@@ -105,15 +105,11 @@ const updateMATHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật mặt hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật mặt hàng ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật mặt hàng ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật mặt hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -123,7 +119,7 @@ const updateMATHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật mặt hàng không thành công" });
+    res.send({ message: "Cập nhật mặt hàng không thành công" });
   }
 };
 
@@ -135,18 +131,18 @@ const deleteMATHANG = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy mặt hàng" });
+      res.send({ message: "Không tìm thấy mặt hàng" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa mặt hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa mặt hàng ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa mặt hàng ở MySql" });
+            res.send({ message: "Lỗi khi xóa mặt hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -156,7 +152,7 @@ const deleteMATHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

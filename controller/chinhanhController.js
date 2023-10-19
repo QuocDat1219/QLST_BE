@@ -9,7 +9,7 @@ const getChiNhanh = async (req, res) => {
     const result = await sqlPool.request().query(sqlQuery);
     res.json(result.recordset);
   } catch (error) {
-    res.status(500).json({ error: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ error: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -21,11 +21,11 @@ const getChiNhanhById = async (req, res) => {
     if (aChiNhanh.recordset.length > 0) {
       res.status(200).json(aChiNhanh.recordset);
     } else {
-      res.status(500).send({ error: "Không tìm thấy chi nhánh!" });
+      res.send({ error: "Không tìm thấy chi nhánh!" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: "Lỗi truy vấn cơ sở dữ liệu!" });
+    res.send({ error: "Lỗi truy vấn cơ sở dữ liệu!" });
   }
 };
 
@@ -47,16 +47,12 @@ const updateChiNhanh = async (req, res) => {
     // Sửa ở cả 2 cơ sở dữ liệu
     sqlPool.request().query(updateQuery, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .json({ error: "Lỗi khi cập nhật chi nhánh trên SQL Server" });
+        res.json({ error: "Lỗi khi cập nhật chi nhánh trên SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
             console.error("Lỗi khi cập nhật chi nhánh trên MySQL:", mysqlError);
-            res
-              .status(500)
-              .json({ error: "Lỗi khi cập nhật chi nhánh trên MySQL" });
+            res.json({ error: "Lỗi khi cập nhật chi nhánh trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ cập nhật thành công!",
@@ -67,7 +63,7 @@ const updateChiNhanh = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Cập nhật không thành công!" });
+    res.json({ error: "Cập nhật không thành công!" });
   }
 };
 
@@ -85,14 +81,12 @@ const deleteChiNhanh = async (req, res) => {
     // thực hiện xóa
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .json({ error: "Lỗi khi xóa chi nhánh trên SQL Server" });
+        res.json({ error: "Lỗi khi xóa chi nhánh trên SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (mysqlError) => {
           if (mysqlError) {
             console.error("Lỗi khi xóa chi nhánh trên MySQL:", mysqlError);
-            res.status(500).json({ error: "Lỗi khi xóa chi nhánh trên MySQL" });
+            res.json({ error: "Lỗi khi xóa chi nhánh trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ xóa công!",
@@ -102,7 +96,7 @@ const deleteChiNhanh = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: "Xóa không thành công!" });
+    res.json({ error: "Xóa không thành công!" });
   }
 };
 module.exports = {

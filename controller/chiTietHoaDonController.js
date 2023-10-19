@@ -11,11 +11,11 @@ const getAllCHITIETHOADON = async (req, res) => {
     if (isCHITIETHOADON > 0) {
       res.status(200).json(allCHITIETHOADON.recordset);
     } else {
-      res.status(400).json({ message: "Không có chi tiết hóa đơn" });
+      res.json({ message: "Không có chi tiết hóa đơn" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getCHITIETHOADONById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aCHITIETHOADON.recordset);
     } else {
-      res.status(400).send({ message: "chi tiết hóa đơn không tồn tại" });
+      res.send({ message: "chi tiết hóa đơn không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -45,7 +45,7 @@ const createCHITIETHOADON = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);
     if (TKExists) {
-      res.status(500).send({ message: "chi tiết hóa đơn đã tồn tại" });
+      res.send({ message: "chi tiết hóa đơn đã tồn tại" });
       return;
     }
 
@@ -53,15 +53,11 @@ const createCHITIETHOADON = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi thêm chi tiết hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm chi tiết hóa đơn ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi thêm chi tiết hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi thêm chi tiết hóa đơn ở MySql" });
           } else {
             res
               .status(200)
@@ -71,7 +67,7 @@ const createCHITIETHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm chi tiết hóa đơn không thành công" });
+    res.send({ message: "Thêm chi tiết hóa đơn không thành công" });
   }
 };
 
@@ -84,7 +80,7 @@ const updateCHITIETHOADON = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);
     if (!TKExists) {
-      res.status(400).send({ message: "Không tìm thấy chi tiết hóa đơn" });
+      res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
       return;
     }
 
@@ -92,13 +88,13 @@ const updateCHITIETHOADON = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({
+        res.send({
           message: "Lỗi khi cập nhật chi tiết hóa đơn ở SQL Server",
         });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({
+            res.send({
               message: "Lỗi khi cập nhật chi tiết hóa đơn ở MySql",
             });
           } else {
@@ -110,9 +106,7 @@ const updateCHITIETHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Cập nhật chi tiết hóa đơn không thành công" });
+    res.send({ message: "Cập nhật chi tiết hóa đơn không thành công" });
   }
 };
 
@@ -124,22 +118,18 @@ const deleteCHITIETHOADON = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy chi tiết hóa đơn" });
+      res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .send({ message: "Lỗi khi xóa chi tiết hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa chi tiết hóa đơn ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res
-              .status(500)
-              .send({ message: "Lỗi khi xóa chi tiết hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi xóa chi tiết hóa đơn ở MySql" });
           } else {
             res
               .status(200)
@@ -149,7 +139,7 @@ const deleteCHITIETHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

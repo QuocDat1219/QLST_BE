@@ -13,10 +13,10 @@ const getAllKho = async (req, res) => {
     if (count > 0) {
       res.status(200).json(allKho.recordset);
     } else {
-      res.status(400).send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy kho" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getKhoById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aKho.recordset);
     } else {
-      res.status(400).send({ message: "Kho không tồn tại" });
+      res.send({ message: "Kho không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -44,7 +44,7 @@ const createKho = async (req, res) => {
   try {
     const khoExists = await checkInsert(checkKho);
     if (khoExists) {
-      res.status(500).send({ message: "Kho đã tồn tại" });
+      res.send({ message: "Kho đã tồn tại" });
       return;
     }
 
@@ -52,11 +52,11 @@ const createKho = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({ message: "Lỗi khi thêm kho ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm kho ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm kho ở MySql" });
+            res.send({ message: "Lỗi khi thêm kho ở MySql" });
           } else {
             res.status(200).json({ message: "Đồng bộ thêm kho thành công" });
           }
@@ -64,7 +64,7 @@ const createKho = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm kho không thành công" });
+    res.send({ message: "Thêm kho không thành công" });
   }
 };
 
@@ -77,17 +77,17 @@ const updateKho = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkKho);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy kho" });
       return;
     }
 
     sqlPool.request().query(updateKho, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi cập nhật kho ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật kho ở SQL Server" });
       } else {
         mysqlConnection.query(updateKho, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi cập nhật kho ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật kho ở MySql" });
           } else {
             res
               .status(200)
@@ -97,7 +97,7 @@ const updateKho = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -109,18 +109,18 @@ const deleteKho = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkKho);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy kho" });
       return;
     }
 
     sqlPool.request().query(deleteteKho, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa kho ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa kho ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteKho, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa kho ở MySql" });
+            res.send({ message: "Lỗi khi xóa kho ở MySql" });
           } else {
             res.status(200).json({ message: "Đồng bộ xóa kho thành công" });
           }
@@ -128,7 +128,7 @@ const deleteKho = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 module.exports = {

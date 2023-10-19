@@ -11,11 +11,11 @@ const getAllKE = async (req, res) => {
     if (isKE > 0) {
       res.status(200).json(allKE.recordset);
     } else {
-      res.status(400).json({ message: "Không có kệ hàng" });
+      res.json({ message: "Không có kệ hàng" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getKEById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aKE.recordset);
     } else {
-      res.status(400).send({ message: "kệ hàng không tồn tại" });
+      res.send({ message: "kệ hàng không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -45,7 +45,7 @@ const createKE = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkKE);
     if (TKExists) {
-      res.status(500).send({ message: "kệ hàng đã tồn tại" });
+      res.send({ message: "kệ hàng đã tồn tại" });
       return;
     }
 
@@ -53,11 +53,11 @@ const createKE = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({ message: "Lỗi khi thêm kệ hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm kệ hàng ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm kệ hàng ở MySql" });
+            res.send({ message: "Lỗi khi thêm kệ hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -67,7 +67,7 @@ const createKE = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm kệ hàng không thành công" });
+    res.send({ message: "Thêm kệ hàng không thành công" });
   }
 };
 
@@ -80,7 +80,7 @@ const updateKE = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkKE);
     if (!TKExists) {
-      res.status(400).send({ message: "Không tìm thấy kệ hàng" });
+      res.send({ message: "Không tìm thấy kệ hàng" });
       return;
     }
 
@@ -88,15 +88,11 @@ const updateKE = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật kệ hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật kệ hàng ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật kệ hàng ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật kệ hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -106,7 +102,7 @@ const updateKE = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật kệ hàng không thành công" });
+    res.send({ message: "Cập nhật kệ hàng không thành công" });
   }
 };
 
@@ -118,18 +114,18 @@ const deleteKE = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy kệ hàng" });
+      res.send({ message: "Không tìm thấy kệ hàng" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa kệ hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa kệ hàng ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa kệ hàng ở MySql" });
+            res.send({ message: "Lỗi khi xóa kệ hàng ở MySql" });
           } else {
             res.status(200).json({ message: "Đồng bộ xóa kệ hàng thành công" });
           }
@@ -137,7 +133,7 @@ const deleteKE = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

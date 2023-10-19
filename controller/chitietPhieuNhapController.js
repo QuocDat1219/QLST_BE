@@ -11,11 +11,11 @@ const getAllCHITIETPHIEUNHAP = async (req, res) => {
     if (isCHITIETPHIEUNHAP > 0) {
       res.status(200).json(allCHITIETPHIEUNHAP.recordset);
     } else {
-      res.status(400).json({ message: "Không có chi tiết phiếu nhập" });
+      res.json({ message: "Không có chi tiết phiếu nhập" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getCHITIETPHIEUNHAPById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aCHITIETPHIEUNHAP.recordset);
     } else {
-      res.status(400).send({ message: "chi tiết phiếu nhập không tồn tại" });
+      res.send({ message: "chi tiết phiếu nhập không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -52,7 +52,7 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
     if (TKExists) {
-      res.status(500).send({ message: "chi tiết phiếu nhập đã tồn tại" });
+      res.send({ message: "chi tiết phiếu nhập đã tồn tại" });
       return;
     }
 
@@ -60,15 +60,11 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi thêm chi tiết phiếu nhập ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm chi tiết phiếu nhập ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi thêm chi tiết phiếu nhập ở MySql" });
+            res.send({ message: "Lỗi khi thêm chi tiết phiếu nhập ở MySql" });
           } else {
             res
               .status(200)
@@ -78,9 +74,7 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
       }
     });
   } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Thêm chi tiết phiếu nhập không thành công" });
+    res.send({ message: "Thêm chi tiết phiếu nhập không thành công" });
   }
 };
 
@@ -93,7 +87,7 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
     if (!TKExists) {
-      res.status(400).send({ message: "Không tìm thấy chi tiết phiếu nhập" });
+      res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
       return;
     }
 
@@ -101,13 +95,13 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({
+        res.send({
           message: "Lỗi khi cập nhật chi tiết phiếu nhập ở SQL Server",
         });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({
+            res.send({
               message: "Lỗi khi cập nhật chi tiết phiếu nhập ở MySql",
             });
           } else {
@@ -119,9 +113,7 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
       }
     });
   } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Cập nhật chi tiết phiếu nhập không thành công" });
+    res.send({ message: "Cập nhật chi tiết phiếu nhập không thành công" });
   }
 };
 
@@ -133,22 +125,18 @@ const deleteCHITIETPHIEUNHAP = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy chi tiết phiếu nhập" });
+      res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .send({ message: "Lỗi khi xóa chi tiết phiếu nhập ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa chi tiết phiếu nhập ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res
-              .status(500)
-              .send({ message: "Lỗi khi xóa chi tiết phiếu nhập ở MySql" });
+            res.send({ message: "Lỗi khi xóa chi tiết phiếu nhập ở MySql" });
           } else {
             res
               .status(200)
@@ -158,7 +146,7 @@ const deleteCHITIETPHIEUNHAP = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

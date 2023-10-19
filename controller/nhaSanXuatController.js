@@ -10,11 +10,11 @@ const getAllNHASANXUAT = async (req, res) => {
     if (isNHASANXUAT > 0) {
       res.status(200).json(allNHASANXUAT.recordset);
     } else {
-      res.status(400).json({ message: "Không có nhà sản xuất" });
+      res.json({ message: "Không có nhà sản xuất" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -29,10 +29,10 @@ const getNHASANXUATById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aNHASANXUAT.recordset);
     } else {
-      res.status(400).send({ message: "nhà sản xuất không tồn tại" });
+      res.send({ message: "nhà sản xuất không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -44,7 +44,7 @@ const createNHASANXUAT = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkNHASANXUAT);
     if (TKExists) {
-      res.status(500).send({ message: "nhà sản xuất đã tồn tại" });
+      res.send({ message: "nhà sản xuất đã tồn tại" });
       return;
     }
 
@@ -52,15 +52,11 @@ const createNHASANXUAT = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi thêm nhà sản xuất ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm nhà sản xuất ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi thêm nhà sản xuất ở MySql" });
+            res.send({ message: "Lỗi khi thêm nhà sản xuất ở MySql" });
           } else {
             res
               .status(200)
@@ -70,7 +66,7 @@ const createNHASANXUAT = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm nhà sản xuất không thành công" });
+    res.send({ message: "Thêm nhà sản xuất không thành công" });
   }
 };
 
@@ -83,7 +79,7 @@ const updateNHASANXUAT = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkNHASANXUAT);
     if (!TKExists) {
-      res.status(400).send({ message: "Không tìm thấy nhà sản xuất" });
+      res.send({ message: "Không tìm thấy nhà sản xuất" });
       return;
     }
 
@@ -91,15 +87,11 @@ const updateNHASANXUAT = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật nhà sản xuất ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật nhà sản xuất ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật nhà sản xuất ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật nhà sản xuất ở MySql" });
           } else {
             res
               .status(200)
@@ -109,7 +101,7 @@ const updateNHASANXUAT = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật nhà sản xuất không thành công" });
+    res.send({ message: "Cập nhật nhà sản xuất không thành công" });
   }
 };
 
@@ -121,22 +113,18 @@ const deleteNHASANXUAT = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy nhà sản xuất" });
+      res.send({ message: "Không tìm thấy nhà sản xuất" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .send({ message: "Lỗi khi xóa nhà sản xuất ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa nhà sản xuất ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res
-              .status(500)
-              .send({ message: "Lỗi khi xóa nhà sản xuất ở MySql" });
+            res.send({ message: "Lỗi khi xóa nhà sản xuất ở MySql" });
           } else {
             res
               .status(200)
@@ -146,7 +134,7 @@ const deleteNHASANXUAT = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

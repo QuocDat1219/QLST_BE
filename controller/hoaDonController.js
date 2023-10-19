@@ -11,11 +11,11 @@ const getAllHOADON = async (req, res) => {
     if (isHOADON > 0) {
       res.status(200).json(allHOADON.recordset);
     } else {
-      res.status(400).json({ message: "Không có hóa đơn" });
+      res.json({ message: "Không có hóa đơn" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,10 +30,10 @@ const getHOADONById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aHOADON.recordset);
     } else {
-      res.status(400).send({ message: "hóa đơn không tồn tại" });
+      res.send({ message: "hóa đơn không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -45,7 +45,7 @@ const createHOADON = async (req, res) => {
   try {
     const THOADONxists = await checkInsert(checkHOADON);
     if (THOADONxists) {
-      res.status(500).send({ message: "hóa đơn đã tồn tại" });
+      res.send({ message: "hóa đơn đã tồn tại" });
       return;
     }
 
@@ -53,11 +53,11 @@ const createHOADON = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({ message: "Lỗi khi thêm hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm hóa đơn ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi thêm hóa đơn ở MySql" });
           } else {
             res
               .status(200)
@@ -67,7 +67,7 @@ const createHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm hóa đơn không thành công" });
+    res.send({ message: "Thêm hóa đơn không thành công" });
   }
 };
 
@@ -80,7 +80,7 @@ const updateHOADON = async (req, res) => {
   try {
     const THOADONxists = await checkInsert(checkHOADON);
     if (!THOADONxists) {
-      res.status(400).send({ message: "Không tìm thấy hóa đơn" });
+      res.send({ message: "Không tìm thấy hóa đơn" });
       return;
     }
 
@@ -88,15 +88,11 @@ const updateHOADON = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật hóa đơn ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật hóa đơn ở MySql" });
           } else {
             res
               .status(200)
@@ -106,7 +102,7 @@ const updateHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật hóa đơn không thành công" });
+    res.send({ message: "Cập nhật hóa đơn không thành công" });
   }
 };
 
@@ -118,18 +114,18 @@ const deleteHOADON = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy hóa đơn" });
+      res.send({ message: "Không tìm thấy hóa đơn" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa hóa đơn ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi xóa hóa đơn ở MySql" });
           } else {
             res.status(200).json({ message: "Đồng bộ xóa hóa đơn thành công" });
           }
@@ -137,7 +133,7 @@ const deleteHOADON = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

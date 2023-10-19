@@ -10,11 +10,11 @@ const getAllLOAIHANG = async (req, res) => {
     if (isLOAIHANG > 0) {
       res.status(200).json(allLOAIHANG.recordset);
     } else {
-      res.status(400).json({ message: "Không có loại hàng" });
+      res.json({ message: "Không có loại hàng" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -29,10 +29,10 @@ const getLOAIHANGById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aLOAIHANG.recordset);
     } else {
-      res.status(400).send({ message: "loại hàng không tồn tại" });
+      res.send({ message: "loại hàng không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -44,7 +44,7 @@ const createLOAIHANG = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkLOAIHANG);
     if (TKExists) {
-      res.status(500).send({ message: "loại hàng đã tồn tại" });
+      res.send({ message: "loại hàng đã tồn tại" });
       return;
     }
 
@@ -52,13 +52,11 @@ const createLOAIHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi thêm loại hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm loại hàng ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm loại hàng ở MySql" });
+            res.send({ message: "Lỗi khi thêm loại hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -68,7 +66,7 @@ const createLOAIHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm loại hàng không thành công" });
+    res.send({ message: "Thêm loại hàng không thành công" });
   }
 };
 
@@ -81,7 +79,7 @@ const updateLOAIHANG = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkLOAIHANG);
     if (!TKExists) {
-      res.status(400).send({ message: "Không tìm thấy loại hàng" });
+      res.send({ message: "Không tìm thấy loại hàng" });
       return;
     }
 
@@ -89,15 +87,11 @@ const updateLOAIHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật loại hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật loại hàng ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật loại hàng ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật loại hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -107,7 +101,7 @@ const updateLOAIHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật loại hàng không thành công" });
+    res.send({ message: "Cập nhật loại hàng không thành công" });
   }
 };
 
@@ -119,18 +113,18 @@ const deleteLOAIHANG = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkTK);
     if (!khoExists) {
-      res.status(400).send({ message: "Không tìm thấy loại hàng" });
+      res.send({ message: "Không tìm thấy loại hàng" });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa loại hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa loại hàng ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa loại hàng ở MySql" });
+            res.send({ message: "Lỗi khi xóa loại hàng ở MySql" });
           } else {
             res
               .status(200)
@@ -140,7 +134,7 @@ const deleteLOAIHANG = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 

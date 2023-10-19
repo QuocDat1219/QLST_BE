@@ -10,10 +10,10 @@ const getAllNhanVien = async (req, res) => {
     if (allNhanVien.recordset.length > 0) {
       res.status(200).json(allNhanVien.recordset);
     } else {
-      res.status(400).send({ message: "Không có nhân viên" });
+      res.send({ message: "Không có nhân viên" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -25,11 +25,11 @@ const getNhanVienById = async (req, res) => {
     if (aNhanVien.recordset.length > 0) {
       res.status(200).json(aNhanVien.recordset);
     } else {
-      res.status(400).send({ message: "Không tìm thấy nhân viên!" });
+      res.send({ message: "Không tìm thấy nhân viên!" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu!" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu!" });
   }
 };
 
@@ -49,16 +49,14 @@ const createNhanVien = async (req, res) => {
   try {
     const maNVExists = await checkInsert(checkNhanVien);
     if (maNVExists) {
-      res.status(400).json({ message: "Nhân viên đã tồn tại" });
+      res.json({ message: "Nhân viên đã tồn tại" });
       return;
     }
 
     // Tiến hành thêm nhân viên trên cả hai cơ sở dữ liệu
     sqlPool.request().query(insertQuery, (sqlError) => {
       if (sqlError) {
-        res
-          .status(500)
-          .json({ message: "Lỗi khi thêm nhân viên vào SQL Server" });
+        res.json({ message: "Lỗi khi thêm nhân viên vào SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlInsertError) => {
           if (mysqlInsertError) {
@@ -66,9 +64,7 @@ const createNhanVien = async (req, res) => {
               "Lỗi khi thêm nhân viên vào MySQL:",
               mysqlInsertError
             );
-            res
-              .status(500)
-              .json({ message: "Lỗi khi thêm nhân viên vào MySQL" });
+            res.json({ message: "Lỗi khi thêm nhân viên vào MySQL" });
           } else {
             res.status(201).json({
               message: "Đồng bộ thêm nhân viên thành công!",
@@ -79,7 +75,7 @@ const createNhanVien = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    res.json({
       message: "Lỗi khi tạo nhân viên",
     });
   }
@@ -102,7 +98,7 @@ const updateNhanVien = async (req, res) => {
   try {
     const nvExists = await checkUpdate(checkNhanVien);
     if (!nvExists) {
-      res.status(400).send({ message: "Không tìm thấy nhân viên" });
+      res.send({ message: "Không tìm thấy nhân viên" });
       return;
     }
 
@@ -123,7 +119,7 @@ const updateNhanVien = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Cập nhật nhân viên không thành công!" });
+    res.send({ message: "Cập nhật nhân viên không thành công!" });
   }
 };
 
@@ -134,13 +130,13 @@ const deleteNhanVien = async (req, res) => {
   try {
     const nvExists = await checkUpdate(checkNhanVien);
     if (!nvExists) {
-      res.status(400).send({ message: "Không tìm thấy nhân viên" });
+      res.send({ message: "Không tìm thấy nhân viên" });
       return;
     }
 
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa nhân viên ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa nhân viên ở SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (mySqlError) => {
           if (mySqlError) {

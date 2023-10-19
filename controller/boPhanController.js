@@ -10,10 +10,10 @@ const getAllBoPhan = async (req, res) => {
     if (isCV > 0) {
       res.status(200).json(allCV.recordset);
     } else {
-      res.status(400).json({ message: "Không có bộ phận" });
+      res.send({ message: "Không có bộ phận" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -30,7 +30,7 @@ const getBoPhanById = async (req, res) => {
       res.status(400).send({ message: "bộ phận không tồn tại" });
     }
   } catch (error) {
-    res.status(500).send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
 
@@ -41,7 +41,7 @@ const createBoPhan = async (req, res) => {
   try {
     const CVExists = await checkInsert(checkBOPHAN);
     if (CVExists) {
-      res.status(500).send({ message: "Bộ phận đã tồn tại" });
+      res.send({ message: "Bộ phận đã tồn tại" });
       return;
     }
 
@@ -49,11 +49,11 @@ const createBoPhan = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.status(500).send({ message: "Lỗi khi thêm bộ phận ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm bộ phận ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.status(500).send({ message: "Lỗi khi thêm bộ phận ở MySql" });
+            res.send({ message: "Lỗi khi thêm bộ phận ở MySql" });
           } else {
             res
               .status(200)
@@ -63,7 +63,7 @@ const createBoPhan = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Thêm bộ phận không thành công" });
+    res.send({ message: "Thêm bộ phận không thành công" });
   }
 };
 
@@ -83,15 +83,11 @@ const updateBoPhan = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res
-          .status(500)
-          .send({ message: "Lỗi khi cập nhật bộ phận ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật bộ phận ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res
-              .status(500)
-              .send({ message: "Lỗi khi cập nhật bộ phận ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật bộ phận ở MySql" });
           } else {
             res
               .status(200)
@@ -101,7 +97,7 @@ const updateBoPhan = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Cập nhật bộ phận không thành công" });
+    res.send({ message: "Cập nhật bộ phận không thành công" });
   }
 };
 
@@ -119,12 +115,12 @@ const deleteBoPhan = async (req, res) => {
 
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
-        res.status(500).send({ message: "Lỗi khi xóa bộ phận ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa bộ phận ở SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.status(500).send({ message: "Lỗi khi xóa bộ phận ở MySql" });
+            res.send({ message: "Lỗi khi xóa bộ phận ở MySql" });
           } else {
             res.status(200).json({ message: "Đồng bộ xóa bộ phận thành công" });
           }
@@ -132,7 +128,7 @@ const deleteBoPhan = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).send({ message: "Xóa không thành công" });
+    res.send({ message: "Xóa không thành công" });
   }
 };
 
