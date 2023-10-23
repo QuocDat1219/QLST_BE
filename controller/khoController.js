@@ -107,8 +107,8 @@ const deleteKho = async (req, res) => {
   const checkKho = `SELECT cOUNT(*) as count FROM kho WHERE MaKho = '${id}'`;
 
   try {
-    const khoExists = await checkUpdate(checkKho);
-    if (khoExists) {
+    const khoExists = await checkInsert(checkKho);
+    if (!khoExists) {
       res.send({ message: "Không tìm thấy kho" });
       return;
     }

@@ -116,7 +116,7 @@ const deleteCHITIETHOADON = async (req, res) => {
   const checkTK = `SELECT cOUNT(*) as count FROM CHITIETHOADON WHERE MaHD = '${id}'`;
 
   try {
-    const khoExists = await checkUpdate(checkTK);
+    const khoExists = await checkInsert(checkTK);
     if (!khoExists) {
       res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
       return;

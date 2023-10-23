@@ -73,8 +73,8 @@ const deleteChiNhanh = async (req, res) => {
   const checkChiNhanh = `SELECT COUNT(*) AS COUNT FROM CHINHANH WHERE MaCN='${id}'`;
 
   try {
-    const CNExists = await checkUpdate(checkChiNhanh);
-    if (CNExists) {
+    const CNExists = await checkInsert(checkChiNhanh);
+    if (!CNExists) {
       res.status(400).json({ error: "Không tìm thấy chi nhánh" });
       return;
     }

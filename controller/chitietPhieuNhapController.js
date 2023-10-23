@@ -123,8 +123,8 @@ const deleteCHITIETPHIEUNHAP = async (req, res) => {
   const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
 
   try {
-    const khoExists = await checkUpdate(checkTK);
-    if (khoExists) {
+    const khoExists = await checkInsert(checkTK);
+    if (!khoExists) {
       res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
       return;
     }

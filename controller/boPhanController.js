@@ -107,7 +107,7 @@ const deleteBoPhan = async (req, res) => {
   const checkBOPHAN = `SELECT cOUNT(*) as count FROM BOPHAN WHERE MaBP = '${id}'`;
 
   try {
-    const CVExists = await checkUpdate(checkBOPHAN);
+    const CVExists = await checkInsert(checkBOPHAN);
     if (!CVExists) {
       res.status(400).send({ message: "Không tìm thấy bộ phận" });
       return;

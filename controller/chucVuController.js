@@ -108,8 +108,8 @@ const deleteChucVu = async (req, res) => {
   const checkChucVu = `SELECT cOUNT(*) as count FROM CHUCVU WHERE MaCV = '${id}'`;
 
   try {
-    const CVExists = await checkUpdate(checkChucVu);
-    if (CVExists) {
+    const CVExists = await checkInsert(checkChucVu);
+    if (!CVExists) {
       res.send({ message: "Không tìm thấy chức vụ" });
       return;
     }

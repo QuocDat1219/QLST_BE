@@ -129,8 +129,8 @@ const deleteMATHANG = async (req, res) => {
   const checkTK = `SELECT cOUNT(*) as count FROM MATHANG WHERE MAMH = '${id}'`;
 
   try {
-    const khoExists = await checkUpdate(checkTK);
-    if (khoExists) {
+    const khoExists = await checkInsert(checkTK);
+    if (!khoExists) {
       res.send({ message: "Không tìm thấy mặt hàng" });
       return;
     }

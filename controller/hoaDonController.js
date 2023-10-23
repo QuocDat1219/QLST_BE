@@ -112,8 +112,8 @@ const deleteHOADON = async (req, res) => {
   const checkTK = `SELECT cOUNT(*) as count FROM HOADON WHERE MaHD = '${id}'`;
 
   try {
-    const khoExists = await checkUpdate(checkTK);
-    if (khoExists) {
+    const khoExists = await checkInsert(checkTK);
+    if (!khoExists) {
       res.send({ message: "Không tìm thấy hóa đơn" });
       return;
     }
