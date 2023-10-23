@@ -70,11 +70,11 @@ const updateChiNhanh = async (req, res) => {
 const deleteChiNhanh = async (req, res) => {
   const id = req.params.id;
   const deleteQuery = `DELETE FROM CHINHANH WHERE MaCN = '${id}'`;
-  const checkChiNhanh = `SELECT COUNT(*) AS COUNT FROM CHINHANH WHERE MaCN='${id}`;
+  const checkChiNhanh = `SELECT COUNT(*) AS COUNT FROM CHINHANH WHERE MaCN='${id}'`;
 
   try {
     const CNExists = await checkUpdate(checkChiNhanh);
-    if (!CNExists) {
+    if (CNExists) {
       res.status(400).json({ error: "Không tìm thấy chi nhánh" });
       return;
     }
@@ -89,7 +89,7 @@ const deleteChiNhanh = async (req, res) => {
             res.json({ error: "Lỗi khi xóa chi nhánh trên MySQL" });
           } else {
             res.status(200).json({
-              message: "Đồng bộ xóa công!",
+              message: "Đồng bộ xóa thành công!",
             });
           }
         });
