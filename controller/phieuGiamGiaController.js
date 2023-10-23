@@ -84,7 +84,7 @@ const updatePHIEUGIAMGIA = async (req, res) => {
 
   try {
     const TKExists = await checkInsert(checkPHIEUGIAMGIA);
-    if (!TKExists) {
+    if (TKExists) {
       res.send({ message: "Không tìm thấy phiếu giảm giá" });
       return;
     }

@@ -110,7 +110,7 @@ const deleteKhachHang = async (req, res) => {
   const checkKhachHang = `SELECT cOUNT(*) as count FROM KHACHHANG WHERE MaKH = '${id}'`;
   try {
     const khExists = await checkUpdate(checkKhachHang);
-    if (!khExists) {
+    if (khExists) {
       res.send({ message: "Không tìm thấy khách hàng" });
       return;
     }

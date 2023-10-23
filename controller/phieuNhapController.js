@@ -114,7 +114,7 @@ const deletePhieuNhap = async (req, res) => {
 
   try {
     const khoExists = await checkUpdate(checkTK);
-    if (!khoExists) {
+    if (khoExists) {
       res.send({ message: "Không tìm thấy phiếu nhập" });
       return;
     }

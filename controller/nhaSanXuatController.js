@@ -112,7 +112,7 @@ const deleteNHASANXUAT = async (req, res) => {
 
   try {
     const khoExists = await checkUpdate(checkTK);
-    if (!khoExists) {
+    if (khoExists) {
       res.send({ message: "Không tìm thấy nhà sản xuất" });
       return;
     }

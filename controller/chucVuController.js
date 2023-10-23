@@ -109,7 +109,7 @@ const deleteChucVu = async (req, res) => {
 
   try {
     const CVExists = await checkUpdate(checkChucVu);
-    if (!CVExists) {
+    if (CVExists) {
       res.send({ message: "Không tìm thấy chức vụ" });
       return;
     }

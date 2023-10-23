@@ -124,7 +124,7 @@ const deleteCHITIETPHIEUNHAP = async (req, res) => {
 
   try {
     const khoExists = await checkUpdate(checkTK);
-    if (!khoExists) {
+    if (khoExists) {
       res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
       return;
     }

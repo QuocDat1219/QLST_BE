@@ -129,7 +129,7 @@ const deleteNhanVien = async (req, res) => {
   const checkNhanVien = `SELECT cOUNT(*) as count FROM NHANVIEN WHERE MaNV = '${id}'`;
   try {
     const nvExists = await checkUpdate(checkNhanVien);
-    if (!nvExists) {
+    if (nvExists) {
       res.send({ message: "Không tìm thấy nhân viên" });
       return;
     }

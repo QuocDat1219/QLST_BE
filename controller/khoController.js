@@ -108,7 +108,7 @@ const deleteKho = async (req, res) => {
 
   try {
     const khoExists = await checkUpdate(checkKho);
-    if (!khoExists) {
+    if (khoExists) {
       res.send({ message: "Không tìm thấy kho" });
       return;
     }
