@@ -69,7 +69,6 @@ const phanTanNgang = async (req, res) => {
   }
   if (bang || cot || dieukien) {
     const tanchinh = `Select ${bang}.* from ${bang} where ${cot} = '${phantan}'`;
-    console.log(tanchinh);
     //Tán bảng chi nhánh
     const resultcn = await mysqlConnection.promise().query(tanchinh);
     const [resultsCN] = resultcn;
@@ -494,7 +493,6 @@ const phanTanNgang = async (req, res) => {
           MoTa,
           DVT,
         ];
-        console.log(insertParams10);
         await executeOracleQuery(insertQuery10, insertParams10);
       }
 
