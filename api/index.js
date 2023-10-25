@@ -1,7 +1,10 @@
 require("dotenv").config();
 const { sqlPool, connectSQL } = require("../model/connect_sqlserver");
 const { connectMysql } = require("../model/connect_mysql");
+const { connectOracle } = require("../model/connect_oracle");
 const express = require("express");
+const cors = require("cors");
+
 const chiNhanhRoutes = require("../routes/chinhanhRoutes");
 const nhanVienRoutes = require("../routes/nhanVienRoutes");
 const khachHangRoutes = require("../routes/khachHangRoutes");
@@ -20,9 +23,11 @@ const keHangRoutes = require("../routes/keHangRoutes");
 const hoaDonRoutes = require("../routes/hoaDonRoutes");
 const chiTietHoaDonRoutes = require("../routes/chiTietHoaDonRoutes");
 const matHangRoutes = require("../routes/matHangRoutes");
-const cors = require("cors");
+
 connectSQL();
 connectMysql();
+connectOracle();
+
 const app = express();
 app.set("trust proxy", true);
 app.use(express.json());
