@@ -839,12 +839,12 @@ const phanTanNgang = async (req, res) => {
       }
     } catch (error) {
       console.error("Lỗi khi thực hiện các lệnh SQL:", error);
-      res.status(300).send({ message: "error" });
+      res.send({ message: "Lỗi khi tán đến SQL Server" });
     }
 
     res.status(200).json({ message: "Phân tán thành công" });
   } else {
-    res.status(300).send({ message: "error" });
+    res.send({ message: "Lỗi khi phân tán dữ liệu" });
   }
 };
 
