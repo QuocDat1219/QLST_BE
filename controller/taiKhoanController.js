@@ -109,8 +109,8 @@ const deleteTaiKhoan = async (req, res) => {
   const checkTK = `SELECT cOUNT(*) as count FROM TAIKHOAN WHERE TenTK = '${userName}'`;
 
   try {
-    const khoExists = await checkUpdate(checkTK);
-    if (khoExists) {
+    const khoExists = await checkInsert(checkTK);
+    if (!khoExists) {
       res.send({ message: "Không tìm thấy tài khoản" });
       return;
     }
