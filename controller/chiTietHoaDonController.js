@@ -39,7 +39,7 @@ const getCHITIETHOADONById = async (req, res) => {
 const getCHITIETHOADONDetail = async (req, res) => {
   const mamh = req.query.mamh
   const mahd = req.query.mahd
-
+  console.log('mamh', mamh)
   try {
     const aCHITIETHOADON = await sqlPool
       .request()
@@ -93,15 +93,14 @@ const createCHITIETHOADON = async (req, res) => {
 };
 
 const updateCHITIETHOADON = async (req, res) => {
-  const id = req.params.id;
-  const { reqMaMH, reqSoLuong, reqDonGia, reqThanhTien } = req.body;
-  const updateQuery = `UPDATE CHITIETHOADON SET MaMH = '${reqMaMH}', SoLuong = '${reqSoLuong}',DonGia = '${reqDonGia}',ThanhTien= '${reqThanhTien}' WHERE  MaHD = '${id}' and MaMH = '${reqMaMH}'`;
+  const { reqMaMH, reqSoLuong, reqDonGia, reqThanhTien, idmamh, id } = req.body;
+  const updateQuery = `UPDATE CHITIETHOADON SET MaMH = '${reqMaMH}', SoLuong = '${reqSoLuong}',DonGia = '${reqDonGia}',ThanhTien= '${reqThanhTien}' WHERE  MaHD = '${id}' and MaMH = '${idmamh}'`;
   const checkCHITIETHOADON = `SELECT cOUNT(*) as count FROM CHITIETHOADON WHERE MaHD = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);
-    if (!TKExists) {
-      res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
+    if (TKExists) {
+      res.send({ message: "Trùng chi tiết hóa đơn" });
       return;
     }
 

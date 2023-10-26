@@ -11,9 +11,9 @@ const {
 } = require("../controller/chitietPhieuNhapController");
 
 router.get("/", getAllCHITIETPHIEUNHAP);
-router.get("/:id", getCHITIETPHIEUNHAPById);
 router.get("/detail", getCHITIETPHIEUNHAPDetail);
+router.get("/:id", getCHITIETPHIEUNHAPById);
 router.post("/", createCHITIETPHIEUNHAP);
-router.put("/:id", updateCHITIETPHIEUNHAP);
+router.put("/", updateCHITIETPHIEUNHAP);
 router.post("/deletedetail", deleteCHITIETPHIEUNHAP);
 module.exports = router;

@@ -97,15 +97,15 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const updateCHITIETPHIEUNHAP = async (req, res) => {
-  const id = req.params.id;
-  const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien } = req.body;
-  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
+
+  const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien, id, idmamh } = req.body;
+  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${idmamh}'`;
   const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
-    if (!TKExists) {
-      res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
+    if (TKExists) {
+      res.send({ message: "Trùng chi tiết phiếu nhập" });
       return;
     }
 
