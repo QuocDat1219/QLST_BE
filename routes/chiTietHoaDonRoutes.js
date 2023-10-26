@@ -7,10 +7,12 @@ const {
   createCHITIETHOADON,
   updateCHITIETHOADON,
   deleteCHITIETHOADON,
+  getCHITIETHOADONDetail,
 } = require("../controller/chiTietHoaDonController");
 
 router.get("/", getAllCHITIETHOADON);
 router.get("/:id", getCHITIETHOADONById);
+router.get("/detail", getCHITIETHOADONDetail);
 router.post("/", createCHITIETHOADON);
 router.put("/:id", updateCHITIETHOADON);
 router.post("/deletedetail", deleteCHITIETHOADON);

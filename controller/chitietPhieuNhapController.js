@@ -36,6 +36,24 @@ const getCHITIETPHIEUNHAPById = async (req, res) => {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
+const getCHITIETPHIEUNHAPDetail = async (req, res) => {
+  const mamh = req.query.mamh;
+  const mapn = req.query.mapn;
+  try {
+    const aCHITIETPHIEUNHAP = await sqlPool
+      .request()
+      .query(`SELECT * FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${mapn}' and MaMH = '${mamh}'`);
+    const count = aCHITIETPHIEUNHAP.recordset.length;
+    console.log();
+    if (count > 0) {
+      res.status(200).json(aCHITIETPHIEUNHAP.recordset);
+    } else {
+      res.send({ message: "chi tiết phiếu nhập không tồn tại" });
+    }
+  } catch (error) {
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+  }
+};
 
 const createCHITIETPHIEUNHAP = async (req, res) => {
   const {
@@ -156,4 +174,5 @@ module.exports = {
   createCHITIETPHIEUNHAP,
   updateCHITIETPHIEUNHAP,
   deleteCHITIETPHIEUNHAP,
+  getCHITIETPHIEUNHAPDetail,
 };

@@ -7,10 +7,12 @@ const {
   createCHITIETPHIEUNHAP,
   updateCHITIETPHIEUNHAP,
   deleteCHITIETPHIEUNHAP,
+  getCHITIETPHIEUNHAPDetail,
 } = require("../controller/chitietPhieuNhapController");
 
 router.get("/", getAllCHITIETPHIEUNHAP);
 router.get("/:id", getCHITIETPHIEUNHAPById);
+router.get("/detail", getCHITIETPHIEUNHAPDetail);
 router.post("/", createCHITIETPHIEUNHAP);
 router.put("/:id", updateCHITIETPHIEUNHAP);
 router.post("/deletedetail", deleteCHITIETPHIEUNHAP);

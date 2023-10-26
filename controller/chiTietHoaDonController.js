@@ -36,7 +36,25 @@ const getCHITIETHOADONById = async (req, res) => {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
+const getCHITIETHOADONDetail = async (req, res) => {
+  const mamh = req.query.mamh
+  const mahd = req.query.mahd
 
+  try {
+    const aCHITIETHOADON = await sqlPool
+      .request()
+      .query(`SELECT * FROM CHITIETHOADON WHERE MaHD = '${mahd}' and MaMH = '${mamh}'`);
+    const count = aCHITIETHOADON.recordset.length;
+    console.log();
+    if (count > 0) {
+      res.status(200).json(aCHITIETHOADON.recordset);
+    } else {
+      res.send({ message: "chi tiết hóa đơn không tồn tại" });
+    }
+  } catch (error) {
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+  }
+};
 const createCHITIETHOADON = async (req, res) => {
   const { reqMaHD, reqMaMH, reqSoLuong, reqDonGia, reqThanhTien } = req.body;
   const insertQuery = `INSERT INTO CHITIETHOADON VALUES ('${reqMaHD}','${reqMaMH}','${reqSoLuong}',N'${reqDonGia}','${reqThanhTien}')`;
@@ -153,4 +171,5 @@ module.exports = {
   createCHITIETHOADON,
   updateCHITIETHOADON,
   deleteCHITIETHOADON,
+  getCHITIETHOADONDetail
 };
