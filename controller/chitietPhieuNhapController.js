@@ -47,7 +47,7 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
     reqThanhTien,
   } = req.body;
   const insertQuery = `INSERT INTO CHITIETPHIEUNHAP VALUES ('${reqMaPhieuNhap}','${reqMaMH}','${reqGiaNhap}',N'${reqGiaBan}','${reqSoLuong}', '${reqThanhTien}')`;
-  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}'`;
+  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
@@ -81,8 +81,8 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
 const updateCHITIETPHIEUNHAP = async (req, res) => {
   const id = req.params.id;
   const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien } = req.body;
-  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}'`;
-  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
+  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
@@ -118,9 +118,9 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const deleteCHITIETPHIEUNHAP = async (req, res) => {
-  const id = req.params.id;
-  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
-  const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+  const { reqMaMH, id } = req.body
+  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
+  const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const khoExists = await checkInsert(checkTK);

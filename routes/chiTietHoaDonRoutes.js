@@ -13,5 +13,5 @@ router.get("/", getAllCHITIETHOADON);
 router.get("/:id", getCHITIETHOADONById);
 router.post("/", createCHITIETHOADON);
 router.put("/:id", updateCHITIETHOADON);
-router.delete("/:id", deleteCHITIETHOADON);
+router.post("/deletedetail", deleteCHITIETHOADON);
 module.exports = router;

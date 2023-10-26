@@ -13,5 +13,5 @@ router.get("/", getAllCHITIETPHIEUNHAP);
 router.get("/:id", getCHITIETPHIEUNHAPById);
 router.post("/", createCHITIETPHIEUNHAP);
 router.put("/:id", updateCHITIETPHIEUNHAP);
-router.delete("/:id", deleteCHITIETPHIEUNHAP);
+router.post("/deletedetail", deleteCHITIETPHIEUNHAP);
 module.exports = router;
