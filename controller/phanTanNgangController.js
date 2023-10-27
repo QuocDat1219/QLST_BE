@@ -13,62 +13,63 @@ const phanTanNgang = async (req, res) => {
     cthoadonvitu = "";
   if (bangvitu1 || cotvitu1 || dieukienvitu1) {
     vitu = `SELECT nv.* into ${bangvitu1} FROM ${bang} cn inner join OPENQUERY(MYSQL, 'SELECT nv.* FROM ${bangvitu1} nv') nv on cn.MaCN=nv.MaCN Where nv.${cotvitu1} = '${dieukienvitu1}'`;
-    vitu1 = `SELECT nv.* FROM nhanvien nv 
+    vitu1 = `SELECT * from nhanvien EXCEPT SELECT nv.* FROM nhanvien nv 
          INNER JOIN chucvu cv ON nv.MaCV = cv.MaCV 
          INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN 
-         WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}'`;
+         WHERE cn.${cot}='${phantan}' `;
 
-    taikhoanvitu = `SELECT tk.* FROM taikhoan tk 
+    taikhoanvitu = `SELECT * from taikhoan EXCEPT SELECT tk.* FROM taikhoan tk 
                 INNER JOIN nhanvien nv ON tk.MaNV = nv.MaNV 
                 INNER JOIN chucvu cv ON nv.MaCV = cv.MaCV 
                 INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN 
-                WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}'`;
+                WHERE cn.${cot}='${phantan}' `;
 
-    hoadonvitu = `SELECT hd.* FROM hoadon hd 
+    hoadonvitu = `SELECT * from hoadon EXCEPT SELECT hd.* FROM hoadon hd 
               INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV 
               INNER JOIN chucvu cv ON nv.MaCV = cv.MaCV 
               INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN 
-              WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}'`;
+              WHERE cn.${cot}='${phantan}' `;
 
-    phieunhapvitu = `SELECT pn.* FROM phieunhap pn 
+    phieunhapvitu = `SELECT * from phieunhap EXCEPT SELECT pn.* FROM phieunhap pn 
                  INNER JOIN kho ON pn.MaKho = kho.MaKho 
                  INNER JOIN nhanvien nv ON pn.MaNV = nv.MaNV 
                  INNER JOIN chucvu cv ON cv.MaCV = nv.MaCV 
                  INNER JOIN chinhanh cn ON cn.MaCN = kho.MaCN 
-                 WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}' 
+                 WHERE cn.${cot}='${phantan}'  
                  GROUP BY kho.MaKho`;
 
-    ctphieunhapvitu = `SELECT ctn.* FROM chitietphieunhap ctn 
+    ctphieunhapvitu = `SELECT * from chitietphieunhap EXCEPT SELECT ctn.* FROM chitietphieunhap ctn 
                    INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap 
                    INNER JOIN nhanvien nv ON pn.MaNV = nv.MaNV 
                    INNER JOIN chucvu cv ON nv.MaCV = cv.MaCV 
                    INNER JOIN kho ON kho.MaKho = pn.MaKho 
                    INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN 
-                   WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}'`;
+                   WHERE cn.${cot}='${phantan}' `;
 
-    cthoadonvitu = `SELECT cth.* FROM chitiethoadon cth 
+    cthoadonvitu = `SELECT * from chitiethoadon EXCEPT SELECT cth.* FROM chitiethoadon cth 
                 INNER JOIN hoadon hd ON cth.MaHD = hd.MaHD 
                 INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV 
                 INNER JOIN chucvu cv ON nv.MaCV = cv.MaCV 
                 INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN 
-                WHERE cn.${cot}='${phantan}' AND cv.${cotvitu1}='${dieukienvitu1}'`;
+                WHERE cn.${cot}='${phantan}' `;
   } else {
     vitu =
       "SELECT nv.* into nhanvien FROM chinhanh cn inner join OPENQUERY(MYSQL, 'SELECT nv.* FROM nhanvien nv') nv on cn.MaCN=nv.MaCN";
-    vitu1 = `SELECT nv.* FROM nhanvien nv INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
+    vitu1 = `SELECT * from nhanvien EXCEPT SELECT nv.* FROM nhanvien nv INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
 
-    taikhoanvitu = `SELECT tk.* FROM taikhoan tk INNER JOIN nhanvien nv ON tk.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
+    taikhoanvitu = `SELECT * from taikhoan EXCEPT SELECT tk.* FROM taikhoan tk INNER JOIN nhanvien nv ON tk.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
 
-    hoadonvitu = `SELECT hd.* FROM hoadon hd INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
+    hoadonvitu = `SELECT * from hoadon EXCEPT SELECT hd.* FROM hoadon hd INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
 
-    phieunhapvitu = `SELECT pn.* FROM phieunhap pn INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON cn.MaCN = kho.MaCN WHERE cn.${cot}='${phantan}'`;
+    phieunhapvitu = `SELECT * from phieunhap EXCEPT SELECT pn.* FROM phieunhap pn INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON cn.MaCN = kho.MaCN WHERE cn.${cot}='${phantan}'`;
 
-    ctphieunhapvitu = `SELECT ctn.* FROM chitietphieunhap ctn INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
+    ctphieunhapvitu = `SELECT * from chitietphieunhap EXCEPT SELECT ctn.* FROM chitietphieunhap ctn INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
 
-    cthoadonvitu = `SELECT cth.* FROM chitiethoadon cth INNER JOIN hoadon hd ON cth.MaHD = hd.MaHD INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
+    cthoadonvitu = `SELECT * from chitiethoadon EXCEPT SELECT cth.* FROM chitiethoadon cth INNER JOIN hoadon hd ON cth.MaHD = hd.MaHD INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}='${phantan}'`;
   }
   if (bang || cot || dieukien) {
-    const tanchinh = `Select ${bang}.* from ${bang} where ${cot} = '${phantan}'`;
+    const tanchinh = `Select * from ${bang} EXCEPT Select ${bang}.* from ${bang} where ${cot} = '${phantan}' `;
+
     //Tán bảng chi nhánh
     const resultcn = await mysqlConnection.promise().query(tanchinh);
     const [resultsCN] = resultcn;
@@ -159,7 +160,7 @@ const phanTanNgang = async (req, res) => {
     const resultKH = await mysqlConnection
       .promise()
       .query(
-        `select kh.* from khachhang kh inner join chinhanh cn on kh.MaCN = cn.MaCN where cn.${cot}='${phantan}'`
+        `select * from khachhang EXCEPT select kh.* from khachhang kh inner join chinhanh cn on kh.MaCN = cn.MaCN where cn.${cot}='${phantan}'`
       );
     const [reusltkhs] = resultKH;
     if (reusltkhs.length > 0) {
@@ -212,7 +213,7 @@ const phanTanNgang = async (req, res) => {
     const resultKho = await mysqlConnection
       .promise()
       .query(
-        `select kho.* from kho inner join chinhanh cn on kho.MaCN = cn.MaCN where cn.${cot} = '${phantan}'`
+        `select * from kho EXCEPT select kho.* from kho inner join chinhanh cn on kho.MaCN = cn.MaCN where cn.${cot} = '${phantan}'`
       );
     const [khoResults] = resultKho;
     if (khoResults.length > 0) {
@@ -289,7 +290,7 @@ const phanTanNgang = async (req, res) => {
     }
 
     //Phân tán chức vụ
-    const mysqlQueryChucVu = `SELECT cv.* FROM chucvu cv INNER JOIN nhanvien nv ON cv.MaCV = nv.MaCV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}=N'${phantan}'`;
+    const mysqlQueryChucVu = `select * from chucvu`;
     const CVresult = await mysqlConnection.promise().query(mysqlQueryChucVu);
     const [CVresults] = CVresult;
     const checkTableQueryChucVu =
@@ -325,7 +326,7 @@ const phanTanNgang = async (req, res) => {
     }
 
     //Phân tán bộ phận
-    const mysqlQueryBoPhan = `SELECT bp.* FROM bophan bp INNER JOIN chucvu cv ON bp.MaBP = cv.MaBP INNER JOIN nhanvien nv ON cv.MaCV = nv.MaCV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN WHERE cn.${cot}=N'${phantan}'`;
+    const mysqlQueryBoPhan = `select * from bophan`;
     const boPhanResult = await mysqlConnection
       .promise()
       .query(mysqlQueryBoPhan);
@@ -454,7 +455,7 @@ const phanTanNgang = async (req, res) => {
     const sanPhamResult = await mysqlConnection
       .promise()
       .query(
-        `select mh.* from mathang mh inner join chitietphieunhap ctn on mh.MaMH = ctn.MaMH inner join phieunhap pn on pn.MaPhieuNhap = ctn.MaPhieuNhap INNER join kho on pn.MaKho = kho.MaKho INNER join chinhanh cn on kho.MaCN = cn.MaCN where cn.${cot} = '${phantan}'`
+        `select * from mathang EXCEPT select mh.* from mathang mh inner join chitietphieunhap ctn on mh.MaMH = ctn.MaMH inner join phieunhap pn on pn.MaPhieuNhap = ctn.MaPhieuNhap INNER join kho on pn.MaKho = kho.MaKho INNER join chinhanh cn on kho.MaCN = cn.MaCN where cn.${cot} = '${phantan}'`
       );
     const [sanPhamResults] = sanPhamResult;
     if (sanPhamResults.length > 0) {
@@ -556,7 +557,7 @@ const phanTanNgang = async (req, res) => {
     const danhMucResult = await mysqlConnection
       .promise()
       .query(
-        `SELECT lh.* from loaihang lh INNER JOIN mathang mh on lh.MaLH = mh.MaLH INNER JOIN chitietphieunhap ctn on mh.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN WHERE cn.${cot} = '${phantan}'`
+        `select * from loaihang EXCEPT SELECT lh.* from loaihang lh INNER JOIN mathang mh on lh.MaLH = mh.MaLH INNER JOIN chitietphieunhap ctn on mh.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN WHERE cn.${cot} = '${phantan}'`
       );
     const [danhMucResults] = danhMucResult;
     if (danhMucResults.length > 0) {
@@ -637,7 +638,7 @@ const phanTanNgang = async (req, res) => {
     const nXSResult = await mysqlConnection
       .promise()
       .query(
-        `SELECT nsx.* FROM nhasanxuat nsx INNER JOIN mathang mh ON nsx.MaNsx = mh.MaNSX INNER JOIN chitietphieunhap ctn ON mh.MaMH = ctn.MaMH INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN WHERE cn.${cot}=N'${phantan}' GROUP BY nsx.MaNsx`
+        `select * from nhasanxuat EXCEPT SELECT nsx.* FROM nhasanxuat nsx INNER JOIN mathang mh ON nsx.MaNsx = mh.MaNSX INNER JOIN chitietphieunhap ctn ON mh.MaMH = ctn.MaMH INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN WHERE cn.${cot}=N'${phantan}' GROUP BY nsx.MaNsx`
       );
     const [nXSResults] = nXSResult;
     const checkTableQueryNhaSanXuat =
@@ -678,9 +679,7 @@ const phanTanNgang = async (req, res) => {
     //Phân tán phiếu giảm giá
     const phieuGiamGiaResult = await mysqlConnection
       .promise()
-      .query(
-        `SELECT pgg.* from phieugiamgia pgg INNER JOIN mathang mh on pgg.MaGiamGia = mh.MaGiamGia INNER JOIN chitiethoadon cthd on mh.MaMH = cthd.MaMH INNER JOIN hoadon hd on hd.MaHD = cthd.MaHD INNER JOIN khachhang kh on kh.MaKH = hd.MaKH INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN where cn.${cot}='${phantan}'`
-      );
+      .query(`select * from phieugiamgia`);
     const [phieuGiamGiaResults] = phieuGiamGiaResult;
     if (phieuGiamGiaResults.length > 0) {
       const checkTableQueryPGG =
@@ -729,7 +728,7 @@ const phanTanNgang = async (req, res) => {
     const keResult = await mysqlConnection
       .promise()
       .query(
-        `SELECT ke.* from ke INNER JOIN mathang mh on ke.MaMH = mh.MaMH INNER JOIN chitiethoadon cthd on mh.MaMH = cthd.MaMH INNER JOIN hoadon hd on hd.MaHD = cthd.MaHD INNER JOIN khachhang kh on kh.MaKH = hd.MaKH INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN where cn.${cot}='${phantan}'`
+        `select * from ke EXCEPT SELECT ke.* from ke INNER JOIN mathang mh on ke.MaMH = mh.MaMH INNER JOIN chitiethoadon cthd on mh.MaMH = cthd.MaMH INNER JOIN hoadon hd on hd.MaHD = cthd.MaHD INNER JOIN khachhang kh on kh.MaKH = hd.MaKH INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN where cn.${cot}='${phantan}'`
       );
     const [keResults] = keResult;
     const checkTableQueryKe =
@@ -769,7 +768,7 @@ const phanTanNgang = async (req, res) => {
     try {
       const phanTanQueries = [
         //   --Tạo bảng chi nhánh---
-        `SELECT * into chinhanh FROM OPENQUERY(MYSQL, 'SELECT * FROM chinhanh') except SELECT * FROM OPENQUERY(MYSQL, 'SELECT * FROM chinhanh Where ${cot} = N''${phantan}''')`,
+        `SELECT * into chinhanh FROM OPENQUERY(MYSQL, 'SELECT * FROM chinhanh Where ${cot} = N''${phantan}''')`,
         "alter table chinhanh add constraint pri_key_cn primary key (MaCN)",
         //   --Tạo bảng nhân viên---
         vitu,
@@ -804,7 +803,7 @@ const phanTanNgang = async (req, res) => {
         "alter table chitiethoadon add constraint pri_key_ct primary key (MaHD,MaMH)",
         "alter table chitiethoadon add constraint FK_cthd_hd foreign key (MaHD) references hoadon(MaHD)",
         //   --Tạo bảng mặt hàng--
-        "SELECT mh.* into mathang FROM chitiethoadon cthd inner JOIN OPENQUERY(MYSQL, 'SELECT mh.* FROM mathang mh') mh ON cthd.MaMH = mh.MaMH",
+        "SELECT mh.* into mathang FROM chitiethoadon cthd inner JOIN OPENQUERY(MYSQL, 'SELECT mh.* FROM mathang mh') mh ON cthd.MaMH = mh.MaMH GROUP BY mh.MaMH, mh.MaLH ,mh.MaNSX, mh.MaGiamGia, mh.TenMH, mh.GiamGia, mh.MoTa, mh.DVT",
         "alter table mathang add constraint pri_key_mh primary key (MaMH)",
         "alter table chitiethoadon add constraint FK_cthd_mh foreign key (MaMH) references mathang(MaMH)",
         //   --Tạo bảng loại hàng--
