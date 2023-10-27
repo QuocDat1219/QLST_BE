@@ -6,6 +6,7 @@ const sqlConfig = {
   password: process.env.SQL_PASSWORD,
   server: process.env.SERVER_NAME,
   database: process.env.SQL_DATABASE,
+  requestTimeout: 600000,
   options: {
     encrypt: false,
   },
