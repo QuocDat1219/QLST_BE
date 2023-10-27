@@ -42,7 +42,9 @@ const getCHITIETPHIEUNHAPDetail = async (req, res) => {
   try {
     const aCHITIETPHIEUNHAP = await sqlPool
       .request()
-      .query(`SELECT * FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${mapn}' and MaMH = '${mamh}'`);
+      .query(
+        `SELECT * FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${mapn}' and MaMH = '${mamh}'`
+      );
     const count = aCHITIETPHIEUNHAP.recordset.length;
     console.log();
     if (count > 0) {
@@ -97,14 +99,21 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const updateCHITIETPHIEUNHAP = async (req, res) => {
-
-  const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien, id, idmamh } = req.body;
-  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${idmamh}'`;
+  const {
+    reqMaMH,
+    reqGiaNhap,
+    reqGiaBan,
+    reqSoLuong,
+    reqThanhTien,
+    id,
+    idmamh,
+  } = req.body;
+  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${idmamh}'`;
   const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
-    const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
-    if (TKExists) {
+    const TKExists = await checkUpdate(checkCHITIETPHIEUNHAP);
+    if (!TKExists) {
       res.send({ message: "Trùng chi tiết phiếu nhập" });
       return;
     }
@@ -136,7 +145,7 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const deleteCHITIETPHIEUNHAP = async (req, res) => {
-  const { reqMaMH, id } = req.body
+  const { reqMaMH, id } = req.body;
   const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
   const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
