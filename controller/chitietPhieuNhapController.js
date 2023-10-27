@@ -36,6 +36,24 @@ const getCHITIETPHIEUNHAPById = async (req, res) => {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };
+const getCHITIETPHIEUNHAPDetail = async (req, res) => {
+  const mamh = req.query.mamh;
+  const mapn = req.query.mapn;
+  try {
+    const aCHITIETPHIEUNHAP = await sqlPool
+      .request()
+      .query(`SELECT * FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${mapn}' and MaMH = '${mamh}'`);
+    const count = aCHITIETPHIEUNHAP.recordset.length;
+    console.log();
+    if (count > 0) {
+      res.status(200).json(aCHITIETPHIEUNHAP.recordset);
+    } else {
+      res.send({ message: "chi tiết phiếu nhập không tồn tại" });
+    }
+  } catch (error) {
+    res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
+  }
+};
 
 const createCHITIETPHIEUNHAP = async (req, res) => {
   const {
@@ -47,7 +65,7 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
     reqThanhTien,
   } = req.body;
   const insertQuery = `INSERT INTO CHITIETPHIEUNHAP VALUES ('${reqMaPhieuNhap}','${reqMaMH}','${reqGiaNhap}',N'${reqGiaBan}','${reqSoLuong}', '${reqThanhTien}')`;
-  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}'`;
+  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
@@ -79,15 +97,15 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const updateCHITIETPHIEUNHAP = async (req, res) => {
-  const id = req.params.id;
-  const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien } = req.body;
-  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}'`;
-  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+
+  const { reqMaMH, reqGiaNhap, reqGiaBan, reqSoLuong, reqThanhTien, id, idmamh } = req.body;
+  const updateQuery = `UPDATE CHITIETPHIEUNHAP SET MaMH = '${reqMaMH}', GiaNhap = '${reqGiaNhap}',GiaBan = '${reqGiaBan}', SoLuong= '${reqSoLuong}',ThanhTien= '${reqThanhTien}' WHERE  MaPhieuNhap = '${id}' and MaMH = '${idmamh}'`;
+  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
-    if (!TKExists) {
-      res.send({ message: "Không tìm thấy chi tiết phiếu nhập" });
+    if (TKExists) {
+      res.send({ message: "Trùng chi tiết phiếu nhập" });
       return;
     }
 
@@ -118,9 +136,9 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
 };
 
 const deleteCHITIETPHIEUNHAP = async (req, res) => {
-  const id = req.params.id;
-  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
-  const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+  const { reqMaMH, id } = req.body
+  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
+  const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
 
   try {
     const khoExists = await checkInsert(checkTK);
@@ -156,4 +174,5 @@ module.exports = {
   createCHITIETPHIEUNHAP,
   updateCHITIETPHIEUNHAP,
   deleteCHITIETPHIEUNHAP,
+  getCHITIETPHIEUNHAPDetail,
 };
