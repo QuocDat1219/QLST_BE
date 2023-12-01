@@ -161,8 +161,9 @@ const nhanVienLogin = async (req, res) => {
     if (!recordExists) {
       res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
     } else {
-      const userInfo = `SELECT nv. MaNV as MaNV, TenNV, SDT, Quyen FROM taikhoan tk inner join nhanvien nv on nv.MaNV = tk.MaNV WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`
-      res.status(200).send({ message: "Đăng nhập thành công" });
+      const userInfo = `SELECT nv. MaNV as MaNV, TenNV, SDT, Quyen FROM taikhoan tk inner join nhanvien nv on nv.MaNV = tk.MaNV WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`;
+      const nhanvien = await sqlPool.request().query(sqlQuery);
+      res.status(200).json(nhanvien);
     }
   } catch (error) {
     res.send({ message: "Lỗi trong quá trình đăng nhập" });
