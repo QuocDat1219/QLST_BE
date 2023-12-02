@@ -87,4 +87,4 @@ const checkUpdate = async (checkQuery) => {
   });
 };
 
-module.exports = { checkInsert, checkUpdate };
+module.exports = { checkInsert, checkUpdate, checkLogin };

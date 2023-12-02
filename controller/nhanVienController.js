@@ -1,6 +1,6 @@
 const { sqlPool } = require("../model/connect_sqlserver");
 const { mysqlConnection } = require("../model/connect_mysql");
-const { checkInsert, checkUpdate,checkLogin } = require("../auth/checkInfomation");
+const { checkInsert, checkUpdate, checkLogin } = require("../auth/checkInfomation");
 
 const getAllNhanVien = async (req, res) => {
   try {
@@ -155,15 +155,18 @@ const deleteNhanVien = async (req, res) => {
 };
 
 const nhanVienLogin = async (req, res) => {
+  const { taikhoan, matkhau } = req.body
   try {
-    const checkTaiKhoan = `SELECT cOUNT(*) as count FROM taikhoan WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`;
+    const checkTaiKhoan = `SELECT cOUNT(*) as count FROM taikhoan WHERE TenTk = '${taikhoan}' and MatKhau = '${matkhau}'`;
+
+
     const recordExists = await checkLogin(checkTaiKhoan);
     if (!recordExists) {
       res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
     } else {
-      const userInfo = `SELECT nv. MaNV as MaNV, TenNV, SDT, Quyen FROM taikhoan tk inner join nhanvien nv on nv.MaNV = tk.MaNV WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`;
-      const nhanvien = await sqlPool.request().query(sqlQuery);
-      res.status(200).json(nhanvien);
+      const userInfo = `SELECT nv. MaNV as MaNV, TenNV, SDT, Quyen FROM taikhoan tk inner join nhanvien nv on nv.MaNV = tk.MaNV WHERE TenTk = '${taikhoan}' and MatKhau = '${matkhau}'`;
+      const nhanvien = await sqlPool.request().query(userInfo);
+      res.status(200).json(nhanvien.recordset);
     }
   } catch (error) {
     res.send({ message: "Lỗi trong quá trình đăng nhập" });
